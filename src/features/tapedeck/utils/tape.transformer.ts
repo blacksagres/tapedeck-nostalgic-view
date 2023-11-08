@@ -27,8 +27,8 @@ const tryParsingPlayingTime = (
  * This function transforms the api response to a flat array of tapes.
  *
  * Normalizes the playingTime property to a number and giving each tape a unique id.
- * @param tapeApiEntries
- * @returns
+ * @param tapeApiEntries the api response
+ * @returns {TapeViewModel[]} an array of tapes
  */
 export const transformTapeApiResponseToViewModel = (
   tapeApiEntries: TapeDeckApiEntry[]
