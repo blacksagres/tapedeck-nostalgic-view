@@ -1,4 +1,4 @@
-type Tape = {
+export type Tape = {
   page?: string;
   img?: string;
   thumb?: string;
