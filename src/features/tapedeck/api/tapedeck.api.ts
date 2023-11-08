@@ -1,4 +1,4 @@
-import { TapeDeckApiEntry } from '@/features/tapedeck/api/types/tape.type';
+import type { TapeDeckApiEntry } from '@/features/tapedeck/api/types/tape.type';
 
 export const fetchTapes = async (): Promise<TapeDeckApiEntry[]> => {
   return await fetch('https://tapedeck-api-fresk.vercel.app/api').then(
