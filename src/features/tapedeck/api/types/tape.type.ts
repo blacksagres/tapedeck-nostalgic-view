@@ -22,5 +22,5 @@ type Color =
 export type Type = 'Ferro' | 'Chrome' | 'Metal' | 'Ferrochrom';
 
 export type TapeDeckApiEntry = {
-  [key: string]: Tape;
+  [key: string]: Tape[];
 };
