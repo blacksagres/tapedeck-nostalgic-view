@@ -3,9 +3,9 @@ export type Tape = {
   img?: string;
   thumb?: string;
   playingTime?: string;
-  color?: Color;
+  color?: string;
   brand?: string;
-  type?: Type;
+  type?: string;
 };
 
 type Color =
