@@ -1,4 +1,4 @@
-import type { Tape } from '../api/types/tape.type';
+import type { Tape } from '@/features/tapedeck/api/types/tape.type';
 
 /**
  * Type with playingTime property normalized to number, so the component doesn't have to deal with the string "minutes"
