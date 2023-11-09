@@ -17,7 +17,6 @@ import { Combobox } from '@/components/combobox';
 
 import {
   DialogHeader,
-  DialogFooter,
   Dialog,
   DialogTrigger,
   DialogContent,
