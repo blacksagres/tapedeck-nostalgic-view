@@ -23,6 +23,7 @@ type ComboBoxProps = {
   value?: string;
   placeholderForUnselected?: string;
   placeholderForSearch?: string;
+  placeholderForNotFound?: string;
   options: DropdownOption[];
   onChange: (value: string) => void;
 };
@@ -34,6 +35,7 @@ export function Combobox(props: ComboBoxProps) {
     onChange,
     placeholderForSearch = 'Search...',
     placeholderForUnselected = 'Select an option',
+    placeholderForNotFound = 'No option found.',
   } = props;
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(valueFromProps);
@@ -56,14 +58,19 @@ export function Combobox(props: ComboBoxProps) {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder={placeholderForSearch} />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>{placeholderForNotFound}</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
               <CommandItem
                 key={option.id}
                 value={option.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? '' : currentValue);
+                onSelect={() => {
+                  /**
+                   * If the option is already selected, then deselect it.
+                   */
+                  const newValue = option.value === value ? '' : option.value;
+                  setValue(newValue);
+                  onChange(newValue);
                   setOpen(false);
                 }}
               >
