@@ -16,8 +16,8 @@ type UseTapeFilterConfig = {
     selectedType: string;
   };
   sources: {
-    tapes: TapeViewModel[];
-    tapesFiltered: TapeViewModel[];
+    tapes?: TapeViewModel[];
+    tapesFiltered?: TapeViewModel[];
   };
 };
 
@@ -32,15 +32,21 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
   const [state, dispatch] = useReducer(tapesFiltersReducer, {
     ...initialState,
     ...params,
+    sources: {
+      tapes: params.sources.tapes ?? [],
+      tapesFiltered: params.sources.tapes ?? [],
+    },
   });
 
   useEffect(() => {
-    dispatch(
-      setSources({
-        tapes: params.sources.tapes,
-        tapesFiltered: params.sources.tapes,
-      })
-    );
+    if (params.sources.tapes) {
+      dispatch(
+        setSources({
+          tapes: params.sources.tapes,
+          tapesFiltered: params.sources.tapes,
+        })
+      );
+    }
   }, [params.sources.tapes]);
 
   const handleOnBrandChange = (brand: string) => {
