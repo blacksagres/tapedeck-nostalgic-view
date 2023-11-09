@@ -97,7 +97,11 @@ function App() {
         />
       </div>
       <Table className="w-1/2 mx-auto">
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>
+          {filterState.sources.tapesFiltered.length === 0
+            ? 'No matches for this query. 🔍'
+            : ''}
+        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Brand</TableHead>
