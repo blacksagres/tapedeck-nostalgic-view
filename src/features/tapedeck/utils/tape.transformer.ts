@@ -2,7 +2,7 @@ import type {
   TapeApiEntry,
   TapeDeckApiEntry,
 } from '@/features/tapedeck/api/types/tape.type';
-import type { TapeViewModel } from '@/features/tapedeck/hooks/tape.view-model.type';
+import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
 
 /**
  * Assuming based on the data that the `playingTime` property is always a string with the format "X minutes",

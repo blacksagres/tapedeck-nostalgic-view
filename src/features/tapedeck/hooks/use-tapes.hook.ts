@@ -1,7 +1,7 @@
 import type { UseQueryResult } from 'react-query';
 import { useQuery } from 'react-query';
 import { fetchTapes } from '@/features/tapedeck/api/tapedeck.api';
-import type { TapeViewModel } from '@/features/tapedeck/hooks/tape.view-model.type';
+import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
 import { transformTapeApiResponseToViewModel } from '@/features/tapedeck/utils/tape.transformer';
 import { sortByBrand } from '@/features/tapedeck/hooks/utils/tape.view-model.utils';
 
