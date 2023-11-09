@@ -69,84 +69,89 @@ function App() {
   }
 
   return (
-    <div className="p-4">
-      <div className="flex justify-end">
+    <div className="flex flex-col items-center justify-center p-4 ">
+      <div className="self-end">
         <ModeToggle />
       </div>
-      <div className="flex flex-row justify-center mb-4 space-x-4">
-        <Combobox
-          options={filterState.options.brands}
-          onChange={filterState.eventHandlers.handleOnBrandChange}
-          placeholderForSearch="Search for a brand..."
-          placeholderForUnselected="Select a brand"
-          value={filterState.values.selectedBrand}
-        />
-        <Combobox
-          options={filterState.options.colors}
-          onChange={filterState.eventHandlers.handleOnColorChange}
-          placeholderForSearch="Search for a color..."
-          placeholderForUnselected="Select a color"
-          value={filterState.values.selectedColor}
-        />
-        <Combobox
-          options={filterState.options.types}
-          onChange={filterState.eventHandlers.handleOnTypeChange}
-          placeholderForSearch="Search for a type..."
-          placeholderForUnselected="Select a type"
-          value={filterState.values.selectedType}
-        />
-      </div>
-      <Table className="w-1/2 mx-auto">
-        <TableCaption>
-          {filterState.sources.tapesFiltered.length === 0
-            ? 'No matches for this query. 🔍'
-            : ''}
-        </TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Brand</TableHead>
-            <TableHead>Color</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead className="text-left">Playing Time</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filterState.sources.tapesFiltered.map((tape) => (
-            <TableRow key={tape.id} className="capitalize">
-              <TableCell
-                className={classnames({
-                  'opacity-50': !tape.brand,
-                })}
-              >
-                {getFallBackTextWhenEmpty(tape.brand)}
-              </TableCell>
-              <TableCell
-                className={classnames({
-                  'opacity-50': !tape.color,
-                })}
-              >
-                {getFallBackTextWhenEmpty(tape.color)}
-              </TableCell>
-              <TableCell
-                className={classnames({
-                  'opacity-50': !tape.type,
-                })}
-              >
-                {getFallBackTextWhenEmpty(tape.type)}
-              </TableCell>
-              <TableCell
-                className={classnames('text-left', {
-                  'opacity-50': !tape.playingTime,
-                })}
-              >
-                {tape.playingTime
-                  ? `${tape.playingTime} minutes`
-                  : getFallBackTextWhenEmpty(tape.playingTime)}
-              </TableCell>
+      <h1 className="mb-16 text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
+        Welcome to the Tapedeck 📼
+      </h1>
+      <div className="flex flex-col justify-center w-1/2 mx-auto">
+        <div className="space-x-4">
+          <Combobox
+            options={filterState.options.brands}
+            onChange={filterState.eventHandlers.handleOnBrandChange}
+            placeholderForSearch="Search for a brand..."
+            placeholderForUnselected="Select a brand"
+            value={filterState.values.selectedBrand}
+          />
+          <Combobox
+            options={filterState.options.colors}
+            onChange={filterState.eventHandlers.handleOnColorChange}
+            placeholderForSearch="Search for a color..."
+            placeholderForUnselected="Select a color"
+            value={filterState.values.selectedColor}
+          />
+          <Combobox
+            options={filterState.options.types}
+            onChange={filterState.eventHandlers.handleOnTypeChange}
+            placeholderForSearch="Search for a type..."
+            placeholderForUnselected="Select a type"
+            value={filterState.values.selectedType}
+          />
+        </div>
+        <Table className="">
+          <TableCaption>
+            {filterState.sources.tapesFiltered.length === 0
+              ? 'No matches for this query. 🔍'
+              : ''}
+          </TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Brand</TableHead>
+              <TableHead>Color</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead className="text-left">Playing Time</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filterState.sources.tapesFiltered.map((tape) => (
+              <TableRow key={tape.id} className="capitalize">
+                <TableCell
+                  className={classnames({
+                    'opacity-50': !tape.brand,
+                  })}
+                >
+                  {getFallBackTextWhenEmpty(tape.brand)}
+                </TableCell>
+                <TableCell
+                  className={classnames({
+                    'opacity-50': !tape.color,
+                  })}
+                >
+                  {getFallBackTextWhenEmpty(tape.color)}
+                </TableCell>
+                <TableCell
+                  className={classnames({
+                    'opacity-50': !tape.type,
+                  })}
+                >
+                  {getFallBackTextWhenEmpty(tape.type)}
+                </TableCell>
+                <TableCell
+                  className={classnames('text-left', {
+                    'opacity-50': !tape.playingTime,
+                  })}
+                >
+                  {tape.playingTime
+                    ? `${tape.playingTime} minutes`
+                    : getFallBackTextWhenEmpty(tape.playingTime)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
