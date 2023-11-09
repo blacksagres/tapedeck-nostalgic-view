@@ -7,75 +7,62 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ModeToggle } from './components/theme-mode-toggle';
+import { ModeToggle } from '@/components/theme-mode-toggle';
+import { useTapes } from '@/features/tapedeck/hooks/use-tapes.hook';
+import classnames from 'classnames';
 
 function App() {
-  const invoices = [
-    {
-      invoice: 'INV001',
-      paymentStatus: 'Paid',
-      totalAmount: '$250.00',
-      paymentMethod: 'Credit Card',
-    },
-    {
-      invoice: 'INV002',
-      paymentStatus: 'Pending',
-      totalAmount: '$150.00',
-      paymentMethod: 'PayPal',
-    },
-    {
-      invoice: 'INV003',
-      paymentStatus: 'Unpaid',
-      totalAmount: '$350.00',
-      paymentMethod: 'Bank Transfer',
-    },
-    {
-      invoice: 'INV004',
-      paymentStatus: 'Paid',
-      totalAmount: '$450.00',
-      paymentMethod: 'Credit Card',
-    },
-    {
-      invoice: 'INV005',
-      paymentStatus: 'Paid',
-      totalAmount: '$550.00',
-      paymentMethod: 'PayPal',
-    },
-    {
-      invoice: 'INV006',
-      paymentStatus: 'Pending',
-      totalAmount: '$200.00',
-      paymentMethod: 'Bank Transfer',
-    },
-    {
-      invoice: 'INV007',
-      paymentStatus: 'Unpaid',
-      totalAmount: '$300.00',
-      paymentMethod: 'Credit Card',
-    },
-  ];
+  const queryResult = useTapes();
+
+  const getFallBackTextWhenEmpty = (value?: string | number) => {
+    return value ?? 'unspecified';
+  };
 
   return (
     <>
       <ModeToggle />
-      <Table>
+      <Table className="w-1/2 mx-auto">
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px]">Brand</TableHead>
+            <TableHead>Color</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead className="text-left">Playing Time</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">
-                {invoice.totalAmount}
+          {(queryResult.data ?? []).map((tape) => (
+            <TableRow key={tape.id} className="capitalize">
+              <TableCell
+                className={classnames({
+                  'opacity-50': !tape.brand,
+                })}
+              >
+                {getFallBackTextWhenEmpty(tape.brand)}
+              </TableCell>
+              <TableCell
+                className={classnames({
+                  'opacity-50': !tape.color,
+                })}
+              >
+                {getFallBackTextWhenEmpty(tape.color)}
+              </TableCell>
+              <TableCell
+                className={classnames({
+                  'opacity-50': !tape.type,
+                })}
+              >
+                {getFallBackTextWhenEmpty(tape.type)}
+              </TableCell>
+              <TableCell
+                className={classnames('text-left', {
+                  'opacity-50': !tape.playingTime,
+                })}
+              >
+                {tape.playingTime
+                  ? `${tape.playingTime} minutes`
+                  : getFallBackTextWhenEmpty(tape.playingTime)}
               </TableCell>
             </TableRow>
           ))}
