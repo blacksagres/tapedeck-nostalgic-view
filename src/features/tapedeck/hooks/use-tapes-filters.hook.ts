@@ -1,20 +1,98 @@
-import type { UseQueryResult } from 'react-query';
-import { useQuery } from 'react-query';
-import { fetchTapes } from '@/features/tapedeck/api/tapedeck.api';
 import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
-import { transformTapeApiResponseToViewModel } from '@/features/tapedeck/utils/tape.transformer';
-import { sortByBrand } from '@/features/tapedeck/hooks/utils/tape.view-model.utils';
+import { useReducer } from 'react';
+import {
+  initialState,
+  setSelectedValues,
+  tapesFiltersReducer,
+} from '@/features/tapedeck/hooks/use-tapes-filters.reducer';
+
+type UseTapeFilterConfig = {
+  values: {
+    selectedBrand: string;
+    selectedColor: string;
+    playtimeLongerThan: number;
+    playtimeShorterThan: number;
+    selectedType: string;
+  };
+  sources: {
+    tapes: TapeViewModel[];
+    tapesFiltered: TapeViewModel[];
+  };
+};
 
 /**
- * Fetches the tapes from the api and transforms the response to a flat array of tapes with normalized playingTime and unique ids.
- * @returns {UseQueryResult<TapeViewModel[], unknown>} a react-query useQuery result
+ * Uses the view model tapes list and generates filters based on the available data,
+ * keeping the source of truth in the tapes list and adding the filtered list as a derived state.
+ *
+ * @param params - for details, check `TapesFilterState` type from {@link import('@/features/tapedeck/hooks/use-tapes-filters.reducer').TapesFilterState)}
+ * @returns
  */
-export const useTapes = (): UseQueryResult<TapeViewModel[], unknown> => {
-  const query = useQuery<TapeViewModel[]>('tapes', async () => {
-    const tapes = await fetchTapes();
-    const tapesViewModels = transformTapeApiResponseToViewModel(tapes);
-    return tapesViewModels.sort(sortByBrand);
+export const useTapeFilters = (params: UseTapeFilterConfig) => {
+  const [state, dispatch] = useReducer(tapesFiltersReducer, {
+    ...initialState,
+    ...params,
   });
 
-  return query;
+  const handleOnBrandChange = (brand: string) => {
+    dispatch(
+      setSelectedValues({
+        ...state.values,
+        selectedBrand: brand,
+      })
+    );
+  };
+
+  const handleOnTypeChange = (type: string) => {
+    dispatch(
+      setSelectedValues({
+        ...state.values,
+        selectedType: type,
+      })
+    );
+  };
+
+  const handleOnColorChange = (color: string) => {
+    dispatch(
+      setSelectedValues({
+        ...state.values,
+        selectedColor: color,
+      })
+    );
+  };
+
+  const handleOnPlayTimeChange = ({
+    min,
+    max,
+  }: {
+    min: number;
+    max: number;
+  }) => {
+    dispatch(
+      setSelectedValues({
+        ...state.values,
+        playtimeLongerThan: min,
+        playtimeShorterThan: max,
+      })
+    );
+  };
+
+  return {
+    values: {
+      selectedBrand: state.values.selectedBrand,
+      selectedColor: state.values.selectedColor,
+      playtimeLongerThan: state.values.playtimeLongerThan,
+      playtimeShorterThan: state.values.playtimeShorterThan,
+      selectedType: state.values.selectedType,
+    },
+    sources: {
+      tapes: state.sources.tapes,
+      tapesFiltered: state.sources.tapesFiltered,
+    },
+    eventHandlers: {
+      handleOnBrandChange,
+      handleOnColorChange,
+      handleOnPlayTimeChange,
+      handleOnTypeChange,
+    },
+  };
 };
