@@ -15,6 +15,17 @@ import { LoadingSpinner } from '@/components/loading-spinner';
 import { useTapeFilters } from '@/features/tapedeck/hooks/use-tapes-filters.hook';
 import { Combobox } from '@/components/combobox';
 
+import {
+  DialogHeader,
+  DialogFooter,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { CassetteTape } from 'lucide-react';
+
 function App() {
   const queryResult = useTapes();
   const filterState = useTapeFilters({
@@ -26,12 +37,10 @@ function App() {
       playtimeShorterThan: Infinity,
     },
     sources: {
-      tapes: queryResult.data,
-      tapesFiltered: queryResult.data,
+      tapes: queryResult.data?.slice(0, 30),
+      tapesFiltered: queryResult.data?.slice(0, 30),
     },
   });
-
-  console.log('filterState', filterState);
 
   const getFallBackTextWhenEmpty = (value?: string | number) => {
     return value ?? 'unspecified';
@@ -73,11 +82,11 @@ function App() {
       <div className="self-end">
         <ModeToggle />
       </div>
-      <h1 className="mb-16 text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
-        Welcome to the Tapedeck 📼
-      </h1>
-      <div className="flex flex-col justify-center w-1/2 mx-auto">
-        <div className="space-x-4">
+      <div className="max-w-[1800px]">
+        <h1 className="flex flex-row mb-16 space-x-4 text-4xl font-extrabold tracking-tight text-center scroll-m-20 lg:text-5xl">
+          <span>Welcome to the Tapedeck</span> <CassetteTape size={60} />
+        </h1>
+        <div className="mb-4 space-x-4">
           <Combobox
             options={filterState.options.brands}
             onChange={filterState.eventHandlers.handleOnBrandChange}
@@ -100,6 +109,15 @@ function App() {
             value={filterState.values.selectedType}
           />
         </div>
+        <div
+          className={classnames([
+            'grid gap-4',
+            'xl:grid-cols-4',
+            'md:grid-cols-3',
+            'sm:grid-cols-2',
+          ])}
+        ></div>
+
         <Table className="">
           <TableCaption>
             {filterState.sources.tapesFiltered.length === 0
@@ -112,6 +130,7 @@ function App() {
               <TableHead>Color</TableHead>
               <TableHead>Type</TableHead>
               <TableHead className="text-left">Playing Time</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -146,6 +165,41 @@ function App() {
                   {tape.playingTime
                     ? `${tape.playingTime} minutes`
                     : getFallBackTextWhenEmpty(tape.playingTime)}
+                </TableCell>
+                <TableCell>
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline">Details</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <img
+                          src={tape.img}
+                          alt={tape.thumb}
+                          className="w-full mt-4 mb-4 rounded-xl"
+                        />
+                        <DialogTitle>Tape details</DialogTitle>
+                        <DialogDescription className="flex flex-col space-y-1">
+                          <span>
+                            Brand: {getFallBackTextWhenEmpty(tape.brand)}
+                          </span>
+
+                          <span>
+                            Color: {getFallBackTextWhenEmpty(tape.color)}
+                          </span>
+                          <span>
+                            Playing time:{' '}
+                            {tape.playingTime
+                              ? `${tape.playingTime} minutes`
+                              : getFallBackTextWhenEmpty(tape.playingTime)}
+                          </span>
+                          <span>
+                            Type: {getFallBackTextWhenEmpty(tape.type)}
+                          </span>
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             ))}
