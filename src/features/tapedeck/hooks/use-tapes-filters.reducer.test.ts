@@ -65,27 +65,45 @@ describe('use-tapes-filters.reducer', () => {
       },
     ];
 
-    test.each([{}])(
-      'when changing the selected values for brand, it should filter the tapes',
-      () => {
-        const [expected] = tapes;
+    test('when changing the selected values for brand, it should filter the tapes', () => {
+      const [expected] = tapes;
 
-        const resultState = tapesFiltersReducer(
-          {
-            ...initialState,
-            sources: {
-              tapes,
-              tapesFiltered: [],
-            },
+      const resultState = tapesFiltersReducer(
+        {
+          ...initialState,
+          sources: {
+            tapes,
+            tapesFiltered: [],
           },
-          setSelectedValues({
-            ...initialState.values,
-            selectedBrand: 'Maxell',
-          })
-        );
+        },
+        setSelectedValues({
+          ...initialState.values,
+          selectedBrand: 'Maxell',
+        })
+      );
 
-        expect(resultState.sources.tapesFiltered).toEqual([expected]);
-      }
-    );
+      expect(resultState.sources.tapesFiltered).toEqual([expected]);
+    });
+
+    test('when changing the selected values for play time, it should filter the tapes', () => {
+      const [first, second] = tapes;
+
+      const resultState = tapesFiltersReducer(
+        {
+          ...initialState,
+          sources: {
+            tapes,
+            tapesFiltered: [],
+          },
+        },
+        setSelectedValues({
+          ...initialState.values,
+          playtimeLongerThan: 30,
+          playtimeShorterThan: 70,
+        })
+      );
+
+      expect(resultState.sources.tapesFiltered).toEqual([first, second]);
+    });
   });
 });
