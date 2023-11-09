@@ -27,7 +27,7 @@ type ComboBoxProps = {
   onChange: (value: string) => void;
 };
 
-export function ComboboxDemo(props: ComboBoxProps) {
+export function Combobox(props: ComboBoxProps) {
   const {
     value: valueFromProps = '',
     options,
