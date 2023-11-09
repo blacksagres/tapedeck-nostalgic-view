@@ -52,8 +52,10 @@ function App() {
   }
 
   return (
-    <>
-      <ModeToggle />
+    <div className="p-4">
+      <div className="flex justify-end">
+        <ModeToggle />
+      </div>
       <Table className="w-1/2 mx-auto">
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -101,7 +103,7 @@ function App() {
           ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }
 
