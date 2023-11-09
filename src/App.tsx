@@ -167,7 +167,7 @@ function App() {
                 </TableCell>
                 <TableCell>
                   <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <Button variant="outline">Details</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
