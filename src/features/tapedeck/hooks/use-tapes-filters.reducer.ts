@@ -81,15 +81,24 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
       );
     })
     .addMatcher(isChangingSourceOrValue, (state) => {
-      state.sources.tapesFiltered = state.sources.tapes
-        .filter(createBrandFilterPredicate(state.values.selectedBrand))
-        .filter(createColorPredicate(state.values.selectedColor))
-        .filter(createTypePredicate(state.values.selectedType))
-        .filter(
-          createPlaytimePredicate({
-            start: state.values.playtimeLongerThan,
-            end: state.values.playtimeShorterThan,
-          })
-        );
+      const combinePredicates = (
+        predicates: ((tape: TapeViewModel) => boolean)[]
+      ) => {
+        return (tape: TapeViewModel) => {
+          return predicates.every((predicate) => predicate(tape));
+        };
+      };
+
+      const filterPredicate = combinePredicates([
+        createBrandFilterPredicate(state.values.selectedBrand),
+        createColorPredicate(state.values.selectedColor),
+        createTypePredicate(state.values.selectedType),
+        createPlaytimePredicate({
+          start: state.values.playtimeLongerThan,
+          end: state.values.playtimeShorterThan,
+        }),
+      ]);
+
+      state.sources.tapesFiltered = state.sources.tapes.filter(filterPredicate);
     });
 });
