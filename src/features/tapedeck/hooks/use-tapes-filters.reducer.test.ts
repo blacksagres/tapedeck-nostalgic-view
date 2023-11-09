@@ -30,4 +30,62 @@ describe('use-tapes-filters.reducer', () => {
 
     expect(resultState).toEqual(initialState);
   });
+
+  describe('when filtering', () => {
+    const tapes = [
+      {
+        id: 'abcd-1',
+        page: 'A1',
+        img: 'https://example.com/tape1.jpg',
+        thumb: 'https://example.com/tape1-thumb.jpg',
+        playingTime: 30,
+        color: 'Green',
+        brand: 'Maxell',
+        type: 'Ferro',
+      },
+      {
+        id: 'efgh-2',
+        page: 'B1',
+        img: 'https://example.com/tape3.jpg',
+        thumb: 'https://example.com/tape3-thumb.jpg',
+        playingTime: 60,
+        color: 'Blue',
+        brand: 'Sony',
+        type: 'Metal',
+      },
+      {
+        id: 'ijkl-3',
+        page: 'C1',
+        img: 'https://example.com/tape3.jpg',
+        thumb: 'https://example.com/tape3-thumb.jpg',
+        playingTime: 90,
+        color: 'Red',
+        brand: 'TDK',
+        type: 'Chrome',
+      },
+    ];
+
+    test.each([{}])(
+      'when changing the selected values for brand, it should filter the tapes',
+      () => {
+        const [expected] = tapes;
+
+        const resultState = tapesFiltersReducer(
+          {
+            ...initialState,
+            sources: {
+              tapes,
+              tapesFiltered: [],
+            },
+          },
+          setSelectedValues({
+            ...initialState.values,
+            selectedBrand: 'Maxell',
+          })
+        );
+
+        expect(resultState.sources.tapesFiltered).toEqual([expected]);
+      }
+    );
+  });
 });
