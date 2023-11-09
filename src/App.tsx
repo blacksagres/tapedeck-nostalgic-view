@@ -10,6 +10,7 @@ import {
 import { ModeToggle } from '@/components/theme-mode-toggle';
 import { useTapes } from '@/features/tapedeck/hooks/use-tapes.hook';
 import classnames from 'classnames';
+import { Button } from '@/components/ui/button';
 
 function App() {
   const queryResult = useTapes();
@@ -17,6 +18,25 @@ function App() {
   const getFallBackTextWhenEmpty = (value?: string | number) => {
     return value ?? 'unspecified';
   };
+
+  if (queryResult.error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen space-y-4">
+        <h2 className="pb-2 text-3xl font-semibold tracking-tight border-b scroll-m-20 first:mt-0">
+          Really sorry 😥, something went wrong on our side.
+        </h2>
+        <div>
+          <Button
+            title="Refresh this page."
+            onClick={() => window.location.reload()}
+          >
+            Try again
+          </Button>
+        </div>
+        <p>If refreshing the page does not help, please contact our support.</p>
+      </div>
+    );
+  }
 
   return (
     <>
