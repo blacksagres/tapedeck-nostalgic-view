@@ -13,4 +13,10 @@ export type TapeViewModel = Omit<TapeApiEntry, 'playingTime'> & {
    * The total playing time of the tape in minutes.
    */
   playingTime?: number;
+  page?: string;
+  img?: string;
+  thumb?: string;
+  color?: string;
+  brand?: string;
+  type?: string;
 };
