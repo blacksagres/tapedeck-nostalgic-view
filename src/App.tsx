@@ -19,6 +19,7 @@ function App() {
     return value ?? 'unspecified';
   };
 
+  // if (true) {
   if (queryResult.error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen space-y-4">
