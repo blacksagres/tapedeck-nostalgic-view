@@ -37,11 +37,11 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
   useEffect(() => {
     dispatch(
       setSources({
-        tapes: state.sources.tapes,
-        tapesFiltered: state.sources.tapes,
+        tapes: params.sources.tapes,
+        tapesFiltered: params.sources.tapes,
       })
     );
-  }, [state.sources.tapes]);
+  }, [params.sources.tapes]);
 
   const handleOnBrandChange = (brand: string) => {
     dispatch(
