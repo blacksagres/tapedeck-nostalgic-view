@@ -12,9 +12,26 @@ import { useTapes } from '@/features/tapedeck/hooks/use-tapes.hook';
 import classnames from 'classnames';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/loading-spinner';
+import { useTapeFilters } from '@/features/tapedeck/hooks/use-tapes-filters.hook';
+import { Combobox } from '@/components/combobox';
 
 function App() {
   const queryResult = useTapes();
+  const filterState = useTapeFilters({
+    values: {
+      selectedBrand: '',
+      selectedColor: '',
+      selectedType: '',
+      playtimeLongerThan: Infinity,
+      playtimeShorterThan: Infinity,
+    },
+    sources: {
+      tapes: queryResult.data,
+      tapesFiltered: queryResult.data,
+    },
+  });
+
+  console.log('filterState', filterState);
 
   const getFallBackTextWhenEmpty = (value?: string | number) => {
     return value ?? 'unspecified';
@@ -56,6 +73,29 @@ function App() {
       <div className="flex justify-end">
         <ModeToggle />
       </div>
+      <div className="flex flex-row justify-center mb-4 space-x-4">
+        <Combobox
+          options={filterState.options.brands}
+          onChange={filterState.eventHandlers.handleOnBrandChange}
+          placeholderForSearch="Search for a brand..."
+          placeholderForUnselected="Select a brand"
+          value={filterState.values.selectedBrand}
+        />
+        <Combobox
+          options={filterState.options.colors}
+          onChange={filterState.eventHandlers.handleOnColorChange}
+          placeholderForSearch="Search for a color..."
+          placeholderForUnselected="Select a color"
+          value={filterState.values.selectedColor}
+        />
+        <Combobox
+          options={filterState.options.types}
+          onChange={filterState.eventHandlers.handleOnTypeChange}
+          placeholderForSearch="Search for a type..."
+          placeholderForUnselected="Select a type"
+          value={filterState.values.selectedType}
+        />
+      </div>
       <Table className="w-1/2 mx-auto">
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -67,7 +107,7 @@ function App() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {(queryResult.data ?? []).map((tape) => (
+          {filterState.sources.tapesFiltered.map((tape) => (
             <TableRow key={tape.id} className="capitalize">
               <TableCell
                 className={classnames({
