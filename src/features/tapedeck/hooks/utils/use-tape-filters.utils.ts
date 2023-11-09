@@ -38,3 +38,35 @@ export const generateDropdownOptions = (
     value: String(brand),
   }));
 };
+
+export const createBrandFilterPredicate = (brand: string) => {
+  if (!brand) return () => true;
+
+  return (tape: TapeViewModel) => tape.brand === brand;
+};
+
+export const createTypePredicate = (type: string) => {
+  if (!type) return () => true;
+
+  return (tape: TapeViewModel) => tape.type === type;
+};
+
+export const createColorPredicate = (color: string) => {
+  if (!color) return () => true;
+
+  return (tape: TapeViewModel) => tape.color === color;
+};
+
+export const createPlaytimePredicate = ({
+  start,
+  end,
+}: {
+  start: number;
+  end: number;
+}) => {
+  return (tape: TapeViewModel) => {
+    if (!tape.playingTime) return false;
+
+    return tape.playingTime >= start && tape.playingTime <= end;
+  };
+};
