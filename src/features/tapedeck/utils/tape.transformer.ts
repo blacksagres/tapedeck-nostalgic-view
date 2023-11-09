@@ -1,4 +1,7 @@
-import type { TapeDeckApiEntry } from '@/features/tapedeck/api/types/tape.type';
+import type {
+  TapeApiEntry,
+  TapeDeckApiEntry,
+} from '@/features/tapedeck/api/types/tape.type';
 import type { TapeViewModel } from '@/features/tapedeck/hooks/tape.view-model.type';
 
 /**
@@ -23,7 +26,44 @@ const tryParsingPlayingTime = (
 };
 
 /**
- * In the api response, the tapes are grouped by the id of the tape deck.
+ * Takes the tuple entry of the tape and reduces it to a single object, so the shape goes from:
+ *
+ * `[{ page: 'A1' }, { img: 'https://example.com/tape1.jpg' }, ...]`
+ *
+ * to
+ *
+ * `{ page: 'A1', img: 'https://example.com/tape1.jpg', ... }`.
+ *
+ * @param tape - the tape tuple entry
+ * @returns a single tape object that almost matches the TapeViewModel type, leaving out the normalized playingTime and id properties
+ */
+const reduceTapeTupleEntry = (tape: TapeApiEntry) => {
+  const tapeObjectReduced = tape.reduce((resultObject, tapeTupleEntry) => {
+    /**
+     * Each entry of the tape tuple is an object with one key-value pair.
+     * So we can use Object.keys to get the the first key.
+     */
+    const [key] = Object.keys(tapeTupleEntry);
+    /**
+     * Another solution here would be to loosen the type of the tape tuple to
+     * `Record<string, string>[]` and then use `tapeTupleEntry[key]`.
+     *
+     * But having more info on the keys is better and safer.
+     */
+    const value = tapeTupleEntry[key as keyof typeof tapeTupleEntry];
+    return {
+      ...resultObject,
+      [key]: value,
+    };
+  }, {}) as Omit<TapeViewModel, 'id' | 'playingTime'> & {
+    playingTime?: string;
+  };
+
+  return tapeObjectReduced;
+};
+
+/**
+ * In the api response, the tape is a tuple-like shape with the object key-values split in an array.
  * This function transforms the api response to a flat array of tapes.
  *
  * Normalizes the playingTime property to a number and giving each tape a unique id.
@@ -33,16 +73,20 @@ const tryParsingPlayingTime = (
 export const transformTapeApiResponseToViewModel = (
   tapeApiEntries: TapeDeckApiEntry[]
 ): TapeViewModel[] => {
-  const result = tapeApiEntries.flatMap((tapeApiEntry) => {
-    const [id] = Object.keys(tapeApiEntry);
-    const tapes = tapeApiEntry[id];
+  const result = tapeApiEntries.flatMap<TapeViewModel>(
+    (tapeApiEntry, index) => {
+      const [id] = Object.keys(tapeApiEntry);
+      const tapeTuple = tapeApiEntry[id];
 
-    return tapes.map((tape, index) => ({
-      id: `${id}-${index + 1}`,
-      ...tape,
-      playingTime: tryParsingPlayingTime(tape.playingTime),
-    }));
-  });
+      const tapeObjectReduced = reduceTapeTupleEntry(tapeTuple);
+
+      return {
+        id: `${id}-${index + 1}`,
+        ...tapeObjectReduced,
+        playingTime: tryParsingPlayingTime(tapeObjectReduced.playingTime),
+      };
+    }
+  );
 
   return result;
 };
