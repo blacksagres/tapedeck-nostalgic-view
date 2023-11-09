@@ -59,7 +59,7 @@ export function Combobox(props: ComboBoxProps) {
         <Command>
           <CommandInput placeholder={placeholderForSearch} />
           <CommandEmpty>{placeholderForNotFound}</CommandEmpty>
-          <CommandGroup>
+          <CommandGroup className="overflow-y-scroll max-h-96">
             {options.map((option) => (
               <CommandItem
                 key={option.id}
