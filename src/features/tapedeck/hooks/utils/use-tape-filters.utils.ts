@@ -65,7 +65,8 @@ export const createPlaytimePredicate = ({
   end: number;
 }) => {
   return (tape: TapeViewModel) => {
-    if (!tape.playingTime) return false;
+    if (start === Infinity && end === Infinity) return true;
+    if (!tape.playingTime) return true;
 
     return tape.playingTime >= start && tape.playingTime <= end;
   };
