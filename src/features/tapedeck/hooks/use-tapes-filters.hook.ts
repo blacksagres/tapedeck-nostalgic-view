@@ -1,8 +1,9 @@
 import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import {
   initialState,
   setSelectedValues,
+  setSources,
   tapesFiltersReducer,
 } from '@/features/tapedeck/hooks/use-tapes-filters.reducer';
 
@@ -32,6 +33,15 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
     ...initialState,
     ...params,
   });
+
+  useEffect(() => {
+    dispatch(
+      setSources({
+        tapes: state.sources.tapes,
+        tapesFiltered: state.sources.tapes,
+      })
+    );
+  }, [state.sources.tapes]);
 
   const handleOnBrandChange = (brand: string) => {
     dispatch(
@@ -83,6 +93,11 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       playtimeLongerThan: state.values.playtimeLongerThan,
       playtimeShorterThan: state.values.playtimeShorterThan,
       selectedType: state.values.selectedType,
+    },
+    options: {
+      brands: state.options.brands,
+      colors: state.options.colors,
+      types: state.options.types,
     },
     sources: {
       tapes: state.sources.tapes,
