@@ -24,6 +24,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { CassetteTape } from 'lucide-react';
+import { usePagination } from '@/features/tapedeck/hooks/use-pagination.hook';
+import { Pagination } from '@/components/pagination';
 
 function App() {
   const queryResult = useTapes();
@@ -36,10 +38,29 @@ function App() {
       playtimeShorterThan: Infinity,
     },
     sources: {
-      tapes: queryResult.data?.slice(0, 30),
-      tapesFiltered: queryResult.data?.slice(0, 30),
+      tapes: queryResult.data,
+      tapesFiltered: queryResult.data,
     },
   });
+
+  const itemsPerPage = 50;
+
+  const {
+    currentPage,
+    setNextPage,
+    setPreviousPage,
+    nextEnabled,
+    previousEnabled,
+    resetPagination,
+  } = usePagination(filterState.sources.tapesFiltered.length, itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentDataPage = filterState.sources.tapesFiltered.slice(
+    startIndex,
+    endIndex
+  );
 
   const getFallBackTextWhenEmpty = (value?: string | number) => {
     return value ?? 'unspecified';
@@ -88,21 +109,30 @@ function App() {
         <div className="mb-4 space-x-4">
           <Combobox
             options={filterState.options.brands}
-            onChange={filterState.eventHandlers.handleOnBrandChange}
+            onChange={(value) => {
+              filterState.eventHandlers.handleOnBrandChange(value);
+              resetPagination();
+            }}
             placeholderForSearch="Search for a brand..."
             placeholderForUnselected="Select a brand"
             value={filterState.values.selectedBrand}
           />
           <Combobox
             options={filterState.options.colors}
-            onChange={filterState.eventHandlers.handleOnColorChange}
+            onChange={(value) => {
+              filterState.eventHandlers.handleOnColorChange(value);
+              resetPagination();
+            }}
             placeholderForSearch="Search for a color..."
             placeholderForUnselected="Select a color"
             value={filterState.values.selectedColor}
           />
           <Combobox
             options={filterState.options.types}
-            onChange={filterState.eventHandlers.handleOnTypeChange}
+            onChange={(value) => {
+              filterState.eventHandlers.handleOnTypeChange(value);
+              resetPagination();
+            }}
             placeholderForSearch="Search for a type..."
             placeholderForUnselected="Select a type"
             value={filterState.values.selectedType}
@@ -116,7 +146,15 @@ function App() {
             'sm:grid-cols-2',
           ])}
         ></div>
-
+        <Pagination
+          nextEnabled={nextEnabled}
+          previousEnabled={previousEnabled}
+          setNextPage={setNextPage}
+          setPreviousPage={setPreviousPage}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          totalItems={filterState.sources.tapesFiltered.length}
+        />
         <Table className="">
           <TableCaption>
             {filterState.sources.tapesFiltered.length === 0
@@ -133,7 +171,7 @@ function App() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filterState.sources.tapesFiltered.map((tape) => (
+            {currentDataPage.map((tape) => (
               <TableRow key={tape.id} className="capitalize">
                 <TableCell
                   className={classnames({
@@ -165,7 +203,7 @@ function App() {
                     ? `${tape.playingTime} minutes`
                     : getFallBackTextWhenEmpty(tape.playingTime)}
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-right">
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline">Details</Button>
@@ -204,6 +242,15 @@ function App() {
             ))}
           </TableBody>
         </Table>
+        <Pagination
+          nextEnabled={nextEnabled}
+          previousEnabled={previousEnabled}
+          setNextPage={setNextPage}
+          setPreviousPage={setPreviousPage}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          totalItems={filterState.sources.tapesFiltered.length}
+        />
       </div>
     </div>
   );
