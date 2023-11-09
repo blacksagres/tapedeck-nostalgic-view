@@ -2,7 +2,13 @@ import type { DropdownOption } from '@/types/dropdown-option.type';
 import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
 import type { AnyAction } from '@reduxjs/toolkit';
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import { generateDropdownOptions } from '@/features/tapedeck/hooks/utils/use-tape-filters.utils';
+import {
+  createBrandFilterPredicate,
+  createColorPredicate,
+  createPlaytimePredicate,
+  createTypePredicate,
+  generateDropdownOptions,
+} from '@/features/tapedeck/hooks/utils/use-tape-filters.utils';
 
 type TapesFilterState = {
   values: {
@@ -73,5 +79,17 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
         action.payload.tapes,
         'type'
       );
+    })
+    .addMatcher(isChangingSourceOrValue, (state) => {
+      state.sources.tapesFiltered = state.sources.tapes
+        .filter(createBrandFilterPredicate(state.values.selectedBrand))
+        .filter(createColorPredicate(state.values.selectedColor))
+        .filter(createTypePredicate(state.values.selectedType))
+        .filter(
+          createPlaytimePredicate({
+            start: state.values.playtimeLongerThan,
+            end: state.values.playtimeShorterThan,
+          })
+        );
     });
 });
