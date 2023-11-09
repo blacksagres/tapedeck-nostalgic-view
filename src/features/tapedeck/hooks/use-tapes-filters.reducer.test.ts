@@ -22,4 +22,12 @@ describe('use-tapes-filters.reducer', () => {
 
     expect(resultState.values).toEqual(expected);
   });
+
+  test('should not change the state if the action is not recognized', () => {
+    const resultState = tapesFiltersReducer(initialState, {
+      type: 'NOT_RECOGNIZED_ACTION',
+    });
+
+    expect(resultState).toEqual(initialState);
+  });
 });
