@@ -16,7 +16,7 @@ module.exports = {
     project: true,
     tsconfigRootDir: __dirname,
   },
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'no-relative-import-paths'],
   ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts'],
   rules: {
     'react-refresh/only-export-components': [
@@ -25,5 +25,13 @@ module.exports = {
     ],
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/consistent-type-imports': 'error',
+    /**
+     * Rule to replace relative imports with absolute ones.
+     */
+    'no-relative-import-paths/no-relative-import-paths': [
+      'warn',
+
+      { allowSameFolder: false, rootDir: 'src', prefix: '@' },
+    ],
   },
 };
