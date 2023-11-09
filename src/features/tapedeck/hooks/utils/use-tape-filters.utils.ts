@@ -32,11 +32,17 @@ export const generateDropdownOptions = (
   tapes: TapeViewModel[],
   key: keyof TapeViewModel
 ) => {
-  return getAllValuesForKey(tapes, key).map<DropdownOption>((brand) => ({
-    id: `brand-dropdown-option-${brand}`,
-    label: String(brand),
-    value: String(brand),
-  }));
+  const result = getAllValuesForKey(tapes, key).map<DropdownOption>(
+    (brand) => ({
+      id: `brand-dropdown-option-${brand}`,
+      label: String(brand),
+      value: String(brand),
+    })
+  );
+
+  result.sort((a, b) => a.label.localeCompare(b.label));
+
+  return result;
 };
 
 export const createBrandFilterPredicate = (brand: string) => {
