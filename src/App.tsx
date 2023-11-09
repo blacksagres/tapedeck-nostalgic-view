@@ -11,6 +11,7 @@ import { ModeToggle } from '@/components/theme-mode-toggle';
 import { useTapes } from '@/features/tapedeck/hooks/use-tapes.hook';
 import classnames from 'classnames';
 import { Button } from '@/components/ui/button';
+import { LoadingSpinner } from '@/components/loading-spinner';
 
 function App() {
   const queryResult = useTapes();
@@ -19,7 +20,18 @@ function App() {
     return value ?? 'unspecified';
   };
 
-  // if (true) {
+  if (queryResult.isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen space-y-4 transform animate-in">
+        <h2 className="flex items-center pb-2 text-3xl font-semibold tracking-tight border-b scroll-m-20 first:mt-0">
+          <LoadingSpinner />
+          Loading...
+        </h2>
+        <p>Please wait while we load your tapes.</p>
+      </div>
+    );
+  }
+
   if (queryResult.error) {
     return (
       <div className="flex flex-col items-center justify-center h-screen space-y-4">
