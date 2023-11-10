@@ -6,6 +6,7 @@ import {
   setSources,
   tapesFiltersReducer,
 } from '@/features/tapedeck/hooks/use-tapes-filters.reducer';
+import { PLAYTIME_CONFIG } from '@/features/tapedeck/hooks/utils/use-tape-filters.utils';
 
 type UseTapeFilterConfig = {
   values: {
@@ -132,6 +133,10 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       handleOnPlayTimeChange,
       handleOnTypeChange,
       handleOnDurationConfigChange,
+    },
+    config: {
+      shouldEnablePlayTimeSlider:
+        PLAYTIME_CONFIG.WITH_PLAYTIME === state.values.selectedDurationConfig,
     },
   };
 };

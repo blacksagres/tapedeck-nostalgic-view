@@ -27,6 +27,7 @@ import { CassetteTape } from 'lucide-react';
 import { usePagination } from '@/features/tapedeck/hooks/use-pagination.hook';
 import { Pagination } from '@/components/pagination';
 import { Slider } from '@/components/ui/slider';
+import classNames from 'classnames';
 
 function App() {
   const queryResult = useTapes();
@@ -156,7 +157,15 @@ function App() {
               value={filterState.values.selectedType}
             />
           </div>
-          <div className="space-y-4">
+          <div
+            className={classNames(
+              'space-y-4 transform transition-all ease-in-out',
+              {
+                'opacity-0': !filterState.config.shouldEnablePlayTimeSlider,
+                'opacity-1': filterState.config.shouldEnablePlayTimeSlider,
+              }
+            )}
+          >
             <p>
               Playing time (shorter than):{' '}
               {filterState.values.playtimeShorterThan} minutes
