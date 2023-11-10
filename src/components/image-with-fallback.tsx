@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import tapeNotFoundFallbackImage from '@/components/assets/tape-not-found-fallback.jpg';
-import { Terminal } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 type ImageWithFallbackProps = {
