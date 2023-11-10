@@ -28,8 +28,7 @@ export const Pagination = ({
   return (
     <div className="flex items-center justify-between">
       <div className="text-sm text-muted-foreground">
-        Showing {startIndex + 1} - {normalizedTotalItems} of{' '}
-        {normalizedTotalItems} tapes
+        Showing {startIndex + 1} - {normalizedTotalItems} of {totalItems} tapes
       </div>
       <div className="flex items-center justify-end py-4 space-x-2">
         <Button
