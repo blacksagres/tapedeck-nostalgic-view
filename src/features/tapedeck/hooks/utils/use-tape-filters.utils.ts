@@ -1,5 +1,8 @@
 import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
 import type { DropdownOption } from '@/types/dropdown-option.type';
+import { current } from 'immer';
+
+const UNSPECIFIED_OPTION = 'unspecified';
 
 const dedupeArray = <T>(array: T[]) => {
   return [...new Set(array)];
@@ -11,6 +14,13 @@ const dedupeArray = <T>(array: T[]) => {
  * @returns whether the value is defined or not
  */
 const isValueDefined = <T>(value?: T | null): value is T => !!value;
+
+/**
+ * To be used with undefined values.
+ * @param value
+ * @returns whether the value is empty or not
+ */
+const isValueEmpty = <T>(value?: T | null): value is T => !value;
 
 const getAllValuesForKey = (
   tapes: TapeViewModel[],
@@ -42,7 +52,14 @@ export const generateDropdownOptions = (
 
   result.sort((a, b) => a.label.localeCompare(b.label));
 
-  return result;
+  return [
+    {
+      id: `filter-option-unspecified-${key}`,
+      label: 'Unspecified',
+      value: UNSPECIFIED_OPTION,
+    },
+    ...result,
+  ];
 };
 
 /**
@@ -71,18 +88,27 @@ export const generatePlayTimeOptions = (
 
 export const createBrandFilterPredicate = (brand: string) => {
   if (!brand) return () => true;
+  if (brand === UNSPECIFIED_OPTION)
+    return (tape: TapeViewModel) => isValueEmpty(tape.brand);
 
   return (tape: TapeViewModel) => tape.brand === brand;
 };
 
 export const createTypePredicate = (type: string) => {
   if (!type) return () => true;
+  if (type === UNSPECIFIED_OPTION)
+    return (tape: TapeViewModel) => isValueEmpty(tape.type);
 
   return (tape: TapeViewModel) => tape.type === type;
 };
 
 export const createColorPredicate = (color: string) => {
   if (!color) return () => true;
+
+  console.log(color);
+  if (color === UNSPECIFIED_OPTION) {
+    return (tape: TapeViewModel) => isValueEmpty(tape.color);
+  }
 
   return (tape: TapeViewModel) => tape.color === color;
 };
