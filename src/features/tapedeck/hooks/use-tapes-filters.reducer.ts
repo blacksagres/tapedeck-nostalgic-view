@@ -3,11 +3,14 @@ import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-mo
 import type { AnyAction } from '@reduxjs/toolkit';
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import {
+  PLAYTIME_CONFIG,
   createBrandFilterPredicate,
   createColorPredicate,
+  createPlaytimeConfigPredicate,
   createPlaytimePredicate,
   createTypePredicate,
   generateDropdownOptions,
+  generatePlayTimeConfigOptions,
   generatePlayTimeOptions,
 } from '@/features/tapedeck/hooks/utils/use-tape-filters.utils';
 
@@ -18,6 +21,7 @@ type TapesFilterState = {
     playtimeLongerThan: number;
     playtimeShorterThan: number;
     selectedType: string;
+    selectedDurationConfig: string;
   };
   options: {
     brands: DropdownOption[];
@@ -27,6 +31,7 @@ type TapesFilterState = {
       min: number;
       max: number;
     };
+    durationConfig: DropdownOption[];
   };
   sources: {
     tapes: TapeViewModel[];
@@ -41,6 +46,7 @@ export const initialState: TapesFilterState = {
     playtimeLongerThan: Infinity,
     playtimeShorterThan: Infinity,
     selectedType: '',
+    selectedDurationConfig: '',
   },
   options: {
     brands: [],
@@ -50,6 +56,7 @@ export const initialState: TapesFilterState = {
       min: 0,
       max: 0,
     },
+    durationConfig: [],
   },
   sources: {
     tapes: [],
@@ -92,6 +99,9 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
       state.options.playTime = generatePlayTimeOptions(action.payload.tapes);
       state.values.playtimeLongerThan = state.options.playTime.min;
       state.values.playtimeShorterThan = state.options.playTime.max;
+
+      state.options.durationConfig = generatePlayTimeConfigOptions();
+      state.values.selectedDurationConfig = PLAYTIME_CONFIG.ANY;
     })
     .addMatcher(isChangingSourceOrValue, (state) => {
       const combinePredicates = (
@@ -106,6 +116,7 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
         createBrandFilterPredicate(state.values.selectedBrand),
         createColorPredicate(state.values.selectedColor),
         createTypePredicate(state.values.selectedType),
+        createPlaytimeConfigPredicate(state.values.selectedDurationConfig),
         createPlaytimePredicate({
           start: state.values.playtimeLongerThan,
           end: state.values.playtimeShorterThan,
