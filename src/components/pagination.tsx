@@ -19,7 +19,11 @@ export const Pagination = ({
   endIndex,
   totalItems,
 }: PaginationProps) => {
-  const normalizedTotalItems = totalItems < endIndex ? totalItems : endIndex;
+  const normalizedTotalItems = (() => {
+    if (nextEnabled) return endIndex;
+
+    return totalItems < endIndex ? totalItems : endIndex;
+  })();
 
   return (
     <div className="flex items-center justify-between">
