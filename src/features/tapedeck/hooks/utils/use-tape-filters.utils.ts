@@ -1,8 +1,21 @@
 import type { TapeViewModel } from '@/features/tapedeck/hooks/types/tape.view-model.type';
 import type { DropdownOption } from '@/types/dropdown-option.type';
-import { current } from 'immer';
 
 const UNSPECIFIED_OPTION = 'unspecified';
+
+export const PLAYTIME_CONFIG = {
+  ANY: 'Any',
+  WITHOUT_PLAYTIME: 'Without play time',
+  WITH_PLAYTIME: 'With play time',
+};
+
+export const generatePlayTimeConfigOptions = () => {
+  return Object.values(PLAYTIME_CONFIG).map<DropdownOption>((option) => ({
+    id: `playtime-config-${option}`,
+    label: option,
+    value: option,
+  }));
+};
 
 const dedupeArray = <T>(array: T[]) => {
   return [...new Set(array)];
@@ -111,6 +124,19 @@ export const createColorPredicate = (color: string) => {
   }
 
   return (tape: TapeViewModel) => tape.color === color;
+};
+
+export const createPlaytimeConfigPredicate = (playTimeConfig: string) => {
+  switch (playTimeConfig) {
+    case PLAYTIME_CONFIG.ANY:
+      return () => true;
+    case PLAYTIME_CONFIG.WITHOUT_PLAYTIME:
+      return (tape: TapeViewModel) => isValueEmpty(tape.playingTime);
+    case PLAYTIME_CONFIG.WITH_PLAYTIME:
+      return (tape: TapeViewModel) => isValueDefined(tape.playingTime);
+    default:
+      return () => true;
+  }
 };
 
 export const createPlaytimePredicate = ({
