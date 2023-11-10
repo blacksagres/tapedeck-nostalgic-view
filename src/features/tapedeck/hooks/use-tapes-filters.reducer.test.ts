@@ -105,5 +105,53 @@ describe('use-tapes-filters.reducer', () => {
 
       expect(resultState.sources.tapesFiltered).toEqual([first, second]);
     });
+
+    test('when changing one of the filters to "specified", it should filter the tapes the value empty for the respective attribute', () => {
+      const colorUnspecifiedTape = {
+        id: 'ijkl-3',
+        page: 'C1',
+        img: 'https://example.com/tape3.jpg',
+        thumb: 'https://example.com/tape3-thumb.jpg',
+        playingTime: 90,
+        color: undefined,
+        brand: 'TDK',
+        type: 'Chrome',
+      };
+
+      const resultState = tapesFiltersReducer(
+        {
+          ...initialState,
+          sources: {
+            tapes: [...tapes, colorUnspecifiedTape],
+            tapesFiltered: [],
+          },
+        },
+
+        setSelectedValues({
+          ...initialState.values,
+          selectedColor: 'unspecified',
+        })
+      );
+
+      expect(resultState.sources.tapesFiltered).toEqual([colorUnspecifiedTape]);
+    });
+
+    test('if no filter value is selected, nothing is filtered', () => {
+      const resultState = tapesFiltersReducer(
+        {
+          ...initialState,
+          sources: {
+            tapes,
+            tapesFiltered: [],
+          },
+        },
+
+        setSelectedValues({
+          ...initialState.values,
+        })
+      );
+
+      expect(resultState.sources.tapesFiltered).toEqual(tapes);
+    });
   });
 });
