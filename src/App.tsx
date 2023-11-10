@@ -105,9 +105,14 @@ function App() {
         <ModeToggle />
       </div>
       <div className="max-w-[1800px]">
-        <h1 className="flex flex-row mb-16 space-x-4 text-4xl font-extrabold tracking-tight text-center scroll-m-20 lg:text-5xl">
-          <span>Welcome to the Tapedeck</span> <CassetteTape size={60} />
-        </h1>
+        <div className="mb-16">
+          <h1 className="flex flex-row justify-center space-x-4 text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
+            <span>The Tapedeck Shack!</span> <CassetteTape size={50} />
+          </h1>
+          <p className="text-sm leading-7 text-center">
+            Use the filters below to find the tape(s) you are looking for.
+          </p>
+        </div>
         <div className="mb-8 space-y-4">
           <div className="space-x-4">
             <Combobox
