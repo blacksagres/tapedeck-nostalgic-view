@@ -26,6 +26,8 @@ import {
 import { CassetteTape } from 'lucide-react';
 import { usePagination } from '@/features/tapedeck/hooks/use-pagination.hook';
 import { Pagination } from '@/components/pagination';
+import { Slider } from '@/components/ui/slider';
+import { Separator } from '@/components/ui/separator';
 
 function App() {
   const queryResult = useTapes();
@@ -106,46 +108,61 @@ function App() {
         <h1 className="flex flex-row mb-16 space-x-4 text-4xl font-extrabold tracking-tight text-center scroll-m-20 lg:text-5xl">
           <span>Welcome to the Tapedeck</span> <CassetteTape size={60} />
         </h1>
-        <div className="mb-4 space-x-4">
-          <Combobox
-            options={filterState.options.brands}
-            onChange={(value) => {
-              filterState.eventHandlers.handleOnBrandChange(value);
-              resetPagination();
-            }}
-            placeholderForSearch="Search for a brand..."
-            placeholderForUnselected="Select a brand"
-            value={filterState.values.selectedBrand}
-          />
-          <Combobox
-            options={filterState.options.colors}
-            onChange={(value) => {
-              filterState.eventHandlers.handleOnColorChange(value);
-              resetPagination();
-            }}
-            placeholderForSearch="Search for a color..."
-            placeholderForUnselected="Select a color"
-            value={filterState.values.selectedColor}
-          />
-          <Combobox
-            options={filterState.options.types}
-            onChange={(value) => {
-              filterState.eventHandlers.handleOnTypeChange(value);
-              resetPagination();
-            }}
-            placeholderForSearch="Search for a type..."
-            placeholderForUnselected="Select a type"
-            value={filterState.values.selectedType}
-          />
+        <div className="mb-8 space-y-4">
+          <div className="space-x-4">
+            <Combobox
+              options={filterState.options.brands}
+              onChange={(value) => {
+                filterState.eventHandlers.handleOnBrandChange(value);
+                resetPagination();
+              }}
+              placeholderForSearch="Search for a brand..."
+              placeholderForUnselected="Select a brand"
+              value={filterState.values.selectedBrand}
+            />
+            <Combobox
+              options={filterState.options.colors}
+              onChange={(value) => {
+                filterState.eventHandlers.handleOnColorChange(value);
+                resetPagination();
+              }}
+              placeholderForSearch="Search for a color..."
+              placeholderForUnselected="Select a color"
+              value={filterState.values.selectedColor}
+            />
+            <Combobox
+              options={filterState.options.types}
+              onChange={(value) => {
+                filterState.eventHandlers.handleOnTypeChange(value);
+                resetPagination();
+              }}
+              placeholderForSearch="Search for a type..."
+              placeholderForUnselected="Select a type"
+              value={filterState.values.selectedType}
+            />
+          </div>
+          <div className="space-y-4">
+            <p>
+              Playing time (shorter than):{' '}
+              {filterState.values.playtimeShorterThan} minutes
+            </p>
+            <Slider
+              defaultValue={[filterState.options.playTime.max]}
+              min={filterState.options.playTime.min}
+              max={filterState.options.playTime.max}
+              onValueCommit={(value) => {
+                const [newValue] = value;
+                console.log(value);
+                filterState.eventHandlers.handleOnPlayTimeChange({
+                  min: filterState.options.playTime.min,
+                  max: newValue,
+                });
+              }}
+              step={1}
+            />
+          </div>
         </div>
-        <div
-          className={classnames([
-            'grid gap-4',
-            'xl:grid-cols-4',
-            'md:grid-cols-3',
-            'sm:grid-cols-2',
-          ])}
-        ></div>
+
         <Pagination
           nextEnabled={nextEnabled}
           previousEnabled={previousEnabled}
