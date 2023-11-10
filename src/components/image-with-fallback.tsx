@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import tapeNotFoundFallbackImage from '@/components/assets/tape-not-found-fallback.jpg';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
@@ -13,37 +13,34 @@ type ImageWithFallbackProps = {
 export const ImageWithFallback = (props: ImageWithFallbackProps) => {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [imageSource, setImageSource] = useState(props.fallbackSrc);
 
-  const onLoadError = () => {
-    setHasError(true);
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    if (props.src) {
+      const image = new Image();
 
-  const onLoadSuccess = () => {
-    setHasError(false);
-    setIsLoading(false);
-  };
+      image.src = props.src;
 
-  const onLoadStart = () => {
-    setIsLoading(true);
-  };
+      setIsLoading(true);
 
-  const imageSource = (() => {
-    if (isLoading) return props.fallbackSrc;
-    if (hasError) return tapeNotFoundFallbackImage;
+      image.onload = () => {
+        setImageSource(props.src as string);
+        setIsLoading(false);
+      };
 
-    return props.src;
-  })();
+      image.onerror = () => {
+        setHasError(true);
+        setIsLoading(false);
+        setImageSource(tapeNotFoundFallbackImage);
+      };
+    }
+  }, [props.src]);
 
   return (
     <div className="relative">
       <img
         src={imageSource}
-        loading="lazy"
         alt={props.alt}
-        onError={onLoadError}
-        onLoad={onLoadSuccess}
-        onLoadStart={onLoadStart}
         className={classNames(
           {
             'animate-pulse': isLoading,
@@ -52,6 +49,7 @@ export const ImageWithFallback = (props: ImageWithFallbackProps) => {
           props.className
         )}
       />
+
       <Alert
         className={classNames(
           [
