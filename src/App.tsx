@@ -162,12 +162,11 @@ function App() {
               {filterState.values.playtimeShorterThan} minutes
             </p>
             <Slider
-              defaultValue={[filterState.values.playtimeShorterThan]}
+              value={[filterState.values.playtimeShorterThan]}
               min={filterState.options.playTime.min}
               max={filterState.options.playTime.max}
-              onValueCommit={(value) => {
+              onValueChange={(value) => {
                 const [newValue] = value;
-                console.log(value);
                 filterState.eventHandlers.handleOnPlayTimeChange({
                   min: filterState.options.playTime.min,
                   max: newValue,
