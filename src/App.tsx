@@ -28,6 +28,7 @@ import { usePagination } from '@/features/tapedeck/hooks/use-pagination.hook';
 import { Pagination } from '@/components/pagination';
 import { Slider } from '@/components/ui/slider';
 import classNames from 'classnames';
+import { ImageWithFallback } from '@/components/image-with-fallback';
 
 function App() {
   const queryResult = useTapes();
@@ -250,11 +251,13 @@ function App() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
-                        <img
+                        <ImageWithFallback
                           src={tape.img}
-                          alt={tape.thumb}
-                          className="w-full mt-4 mb-4 rounded-xl"
+                          alt="me-tape"
+                          fallbackSrc="https://placehold.co/600x400"
+                          className="w-full mt-4 mb-4 rounded-lg"
                         />
+
                         <DialogTitle>Tape details</DialogTitle>
                         <DialogDescription className="flex flex-col space-y-1">
                           <span>
