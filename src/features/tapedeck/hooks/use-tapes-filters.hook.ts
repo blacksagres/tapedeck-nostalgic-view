@@ -14,6 +14,7 @@ type UseTapeFilterConfig = {
     playtimeLongerThan: number;
     playtimeShorterThan: number;
     selectedType: string;
+    selectedDurationConfig: string;
   };
   sources: {
     tapes?: TapeViewModel[];
@@ -76,6 +77,15 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
     );
   };
 
+  const handleOnDurationConfigChange = (config: string) => {
+    dispatch(
+      setSelectedValues({
+        ...state.values,
+        selectedDurationConfig: config,
+      })
+    );
+  };
+
   const handleOnPlayTimeChange = ({
     min,
     max,
@@ -105,6 +115,7 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       colors: state.options.colors,
       types: state.options.types,
       playTime: state.options.playTime,
+      durationConfig: state.options.durationConfig,
     },
     sources: {
       tapes: state.sources.tapes,
@@ -115,6 +126,7 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       handleOnColorChange,
       handleOnPlayTimeChange,
       handleOnTypeChange,
+      handleOnDurationConfigChange,
     },
   };
 };

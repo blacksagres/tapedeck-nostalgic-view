@@ -27,7 +27,6 @@ import { CassetteTape } from 'lucide-react';
 import { usePagination } from '@/features/tapedeck/hooks/use-pagination.hook';
 import { Pagination } from '@/components/pagination';
 import { Slider } from '@/components/ui/slider';
-import { Separator } from '@/components/ui/separator';
 
 function App() {
   const queryResult = useTapes();
@@ -38,6 +37,7 @@ function App() {
       selectedType: '',
       playtimeLongerThan: Infinity,
       playtimeShorterThan: Infinity,
+      selectedDurationConfig: '',
     },
     sources: {
       tapes: queryResult.data,
@@ -143,6 +143,16 @@ function App() {
               }}
               placeholderForSearch="Search for a type..."
               placeholderForUnselected="Select a type"
+              value={filterState.values.selectedType}
+            />
+            <Combobox
+              options={filterState.options.durationConfig}
+              onChange={(value) => {
+                filterState.eventHandlers.handleOnDurationConfigChange(value);
+                resetPagination();
+              }}
+              placeholderForSearch="Play time..."
+              placeholderForUnselected="Play time config"
               value={filterState.values.selectedType}
             />
           </div>
