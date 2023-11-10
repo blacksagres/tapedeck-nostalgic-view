@@ -13,6 +13,7 @@ describe('use-tapes-filters.reducer', () => {
       playtimeLongerThan: 30,
       playtimeShorterThan: 60,
       selectedType: 'Ferro',
+      selectedDurationConfig: '',
     };
 
     const resultState = tapesFiltersReducer(
