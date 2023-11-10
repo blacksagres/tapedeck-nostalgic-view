@@ -45,6 +45,30 @@ export const generateDropdownOptions = (
   return result;
 };
 
+/**
+ * Options to be used in the playtime range slider.
+ * @param tapes - the list of tapes to get the values from
+ * @returns the min and max values for the playtime range slider
+ */
+export const generatePlayTimeOptions = (
+  tapes: TapeViewModel[]
+): {
+  min: number;
+  max: number;
+} => {
+  const playingTimes = tapes
+    .map((tape) => tape.playingTime)
+    .filter(isValueDefined);
+
+  const min = Math.min(...playingTimes);
+  const max = Math.max(...playingTimes);
+
+  return {
+    min,
+    max,
+  };
+};
+
 export const createBrandFilterPredicate = (brand: string) => {
   if (!brand) return () => true;
 
