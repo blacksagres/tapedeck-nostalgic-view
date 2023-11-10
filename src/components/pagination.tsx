@@ -19,10 +19,13 @@ export const Pagination = ({
   endIndex,
   totalItems,
 }: PaginationProps) => {
+  const normalizedTotalItems = totalItems < endIndex ? totalItems : endIndex;
+
   return (
     <div className="flex items-center justify-between">
       <div className="text-sm text-muted-foreground">
-        Showing {startIndex + 1} - {endIndex} of {totalItems} tapes
+        Showing {startIndex + 1} - {normalizedTotalItems} of{' '}
+        {normalizedTotalItems} tapes
       </div>
       <div className="flex items-center justify-end py-4 space-x-2">
         <Button
