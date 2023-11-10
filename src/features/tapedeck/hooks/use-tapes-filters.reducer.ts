@@ -8,6 +8,7 @@ import {
   createPlaytimePredicate,
   createTypePredicate,
   generateDropdownOptions,
+  generatePlayTimeOptions,
 } from '@/features/tapedeck/hooks/utils/use-tape-filters.utils';
 
 type TapesFilterState = {
@@ -22,6 +23,10 @@ type TapesFilterState = {
     brands: DropdownOption[];
     colors: DropdownOption[];
     types: DropdownOption[];
+    playTime: {
+      min: number;
+      max: number;
+    };
   };
   sources: {
     tapes: TapeViewModel[];
@@ -41,6 +46,10 @@ export const initialState: TapesFilterState = {
     brands: [],
     colors: [],
     types: [],
+    playTime: {
+      min: 0,
+      max: 0,
+    },
   },
   sources: {
     tapes: [],
@@ -79,6 +88,8 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
         action.payload.tapes,
         'type'
       );
+
+      state.options.playTime = generatePlayTimeOptions(action.payload.tapes);
     })
     .addMatcher(isChangingSourceOrValue, (state) => {
       const combinePredicates = (
