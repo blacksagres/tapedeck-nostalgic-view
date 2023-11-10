@@ -5,8 +5,8 @@ const UNSPECIFIED_OPTION = 'unspecified';
 
 export const PLAYTIME_CONFIG = {
   ANY: 'Any',
-  WITHOUT_PLAYTIME: 'Without play time',
-  WITH_PLAYTIME: 'With play time',
+  WITHOUT_PLAYTIME: 'Play time unspecified',
+  WITH_PLAYTIME: 'Play time specified',
 };
 
 export const generatePlayTimeConfigOptions = () => {
