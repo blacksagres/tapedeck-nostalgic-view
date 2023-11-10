@@ -1,6 +1,6 @@
 # The TapeDeck Shack
 
-[Netlify Status](https://api.netlify.com/api/v1/badges/6341ef20-d4aa-4992-8512-69f6a0f46d6f/deploy-status)(https://app.netlify.com/sites/the-tapedeck-shack/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6341ef20-d4aa-4992-8512-69f6a0f46d6f/deploy-status)](https://app.netlify.com/sites/the-tapedeck-shack/deploys)
 
 > Latest live version: https://main--the-tapedeck-shack.netlify.app/
 
