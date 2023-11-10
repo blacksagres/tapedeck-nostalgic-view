@@ -104,6 +104,7 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       brands: state.options.brands,
       colors: state.options.colors,
       types: state.options.types,
+      playTime: state.options.playTime,
     },
     sources: {
       tapes: state.sources.tapes,
