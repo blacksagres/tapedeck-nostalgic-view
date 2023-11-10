@@ -20,5 +20,5 @@ Rename `.env.example` to `.env` and add the API key to `VITE_API_KEY`.
 > 🔹 This one is specifically on yarn but other libraries should do just fine as well
 
 1. `yarn install`
-2. `yarn dev
+2. `yarn dev`
 3. The app will be available on `http://localhost:5173/`
