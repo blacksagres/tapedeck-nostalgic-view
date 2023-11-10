@@ -90,6 +90,8 @@ export const tapesFiltersReducer = createReducer(initialState, (builder) => {
       );
 
       state.options.playTime = generatePlayTimeOptions(action.payload.tapes);
+      state.values.playtimeLongerThan = state.options.playTime.min;
+      state.values.playtimeShorterThan = state.options.playTime.max;
     })
     .addMatcher(isChangingSourceOrValue, (state) => {
       const combinePredicates = (
