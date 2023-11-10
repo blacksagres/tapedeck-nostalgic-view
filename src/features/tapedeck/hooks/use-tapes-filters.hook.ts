@@ -82,6 +82,11 @@ export const useTapeFilters = (params: UseTapeFilterConfig) => {
       setSelectedValues({
         ...state.values,
         selectedDurationConfig: config,
+        /**
+         * Resetting the slider values to avoid confusing states
+         */
+        playtimeLongerThan: state.options.playTime.min,
+        playtimeShorterThan: state.options.playTime.max,
       })
     );
   };
